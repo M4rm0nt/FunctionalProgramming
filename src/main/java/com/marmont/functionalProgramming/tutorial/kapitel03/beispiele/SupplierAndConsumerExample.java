@@ -1,18 +1,27 @@
 package com.marmont.functionalProgramming.tutorial.kapitel03.beispiele;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.function.Supplier;
 import java.util.function.Consumer;
 
 public class SupplierAndConsumerExample {
     public static void main(String[] args) {
-        // Ein Supplier, der eine Nachricht erzeugt
+
+        Supplier<String> timeSupplier = () -> LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss"));
+
+        Consumer<String> timeConsumer = message -> System.out.println("["+timeSupplier.get()+"] "+message);
+
         Supplier<String> messageSupplier = () -> "Eine Nachricht von Supplier";
 
-        // Ein Consumer, der die Nachricht verarbeitet
-        Consumer<String> messageConsumer = message -> System.out.println("Consumer verarbeitet: " + message);
+        Consumer<String> messageConsumer = message -> timeConsumer.accept("Consumer verarbeitet: " + message);
 
-        // Kombination von Supplier und Consumer
         String message = messageSupplier.get();
         messageConsumer.accept(message);
+
+        // Erzeugen weiterer Nachrichten für den Time-Consumer
+        for (int i = 0; i < 5; i++) {
+            timeConsumer.accept("Message " + (i+1));
+        }
     }
 }

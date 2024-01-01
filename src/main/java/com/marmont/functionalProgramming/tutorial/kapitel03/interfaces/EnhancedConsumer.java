@@ -7,9 +7,8 @@ import java.util.function.Consumer;
  * @param <T> Der Typ des Eingabewerts für den Consumer
  */
 public interface EnhancedConsumer<T> extends Consumer<T> {
-
     // Eine zusätzliche Methode, die eine bestimmte Aktion vor der Hauptoperation ausführt
-    default Consumer<T> beforeAction(Runnable action) {
+    default EnhancedConsumer<T> beforeAction(Runnable action) {
         return (T t) -> {
             action.run();
             accept(t);
@@ -17,7 +16,7 @@ public interface EnhancedConsumer<T> extends Consumer<T> {
     }
 
     // Eine zusätzliche Methode, die eine bestimmte Aktion nach der Hauptoperation ausführt
-    default Consumer<T> afterAction(Runnable action) {
+    default EnhancedConsumer<T> afterAction(Runnable action) {
         return (T t) -> {
             accept(t);
             action.run();
